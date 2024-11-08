@@ -17,8 +17,7 @@ Dies ist ein To-Do List Projekt, das mit **Spring Boot** für das Backend und **
   - [Frontend](#frontend-konfiguration)
 - [Nutzung](#nutzung)
 - [Projektstruktur](#projektstruktur)
-- [Mitwirkung](#mitwirkung)
-- [Lizenz](#lizenz)
+
 
 ## Beschreibung
 
