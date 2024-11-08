@@ -183,3 +183,6 @@ Die Anwendung bietet folgende Skripte zur Verwaltung und Ausführung von Aufgabe
     ├── src/
     ├── angular.json            # Angular-Konfigurationsdatei
     └── package.json            # NPM-Konfigurationsdatei für Frontend
+
+![Screenshot](photos/canditate1/n.png)
+
