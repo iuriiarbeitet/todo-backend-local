@@ -27,7 +27,7 @@ public class CategoryController {
     @PostMapping("/all")
     public ResponseEntity<List<Category>> findAll(@RequestBody String email){
 
-        MyLogger.debugMethodName("CategoryController: findAll(email) ---------------------------------------------------------- ");
+        MyLogger.debugMethodName("CategoryController: findAll(email) ----------------------------------- ");
 
         return ResponseEntity.ok(categoryService.findAll(email));
     }
@@ -35,7 +35,7 @@ public class CategoryController {
     @PutMapping("/add")
     public ResponseEntity<Category> add(@RequestBody Category category){
 
-        MyLogger.debugMethodName("CategoryController: add(category) ---------------------------------------------------------- ");
+        MyLogger.debugMethodName("CategoryController: add(category) ------------------------------------ ");
 
         if (category.getId() != null && category.getId() != 0) {
             return new ResponseEntity("redundant param: id MUST be null", HttpStatus.NOT_ACCEPTABLE);
@@ -50,7 +50,7 @@ public class CategoryController {
     @PatchMapping("/update")
     public ResponseEntity update(@RequestBody Category category) {
 
-        MyLogger.debugMethodName("CategoryController: update(category) ---------------------------------------------------------- ");
+        MyLogger.debugMethodName("CategoryController: update(category) ---------------------------------- ");
 
         if (category.getId() == null || category.getId() == 0) {
             return new ResponseEntity("missed param: id", HttpStatus.NOT_ACCEPTABLE);
@@ -68,7 +68,7 @@ public class CategoryController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id) {
 
-        MyLogger.debugMethodName("CategoryController: delete(id) ---------------------------------------------------------- ");
+        MyLogger.debugMethodName("CategoryController: delete(id) ----------------------------------------- ");
 
         if (id == null || id == 0) {
             return new ResponseEntity("missed param: id", HttpStatus.NOT_ACCEPTABLE);
@@ -87,7 +87,7 @@ public class CategoryController {
     @PostMapping("/search")
     public ResponseEntity<List<Category>> search(@RequestBody CategorySearchValues categorySearchValues) {
 
-        MyLogger.debugMethodName("CategoryController: search() ---------------------------------------------------------- ");
+        MyLogger.debugMethodName("CategoryController: search() ------------------------------------------ ");
 
         List<Category> list = categoryService.find(categorySearchValues.getTitle(), categorySearchValues.getEmail());
 
@@ -97,7 +97,7 @@ public class CategoryController {
     @PostMapping("/id")
     public ResponseEntity<Category> findById(@RequestBody Long id) {
 
-        MyLogger.debugMethodName("CategoryController: findById() ---------------------------------------------------------- ");
+        MyLogger.debugMethodName("CategoryController: findById() ---------------------------------------- ");
 
         Category category = null;
 
