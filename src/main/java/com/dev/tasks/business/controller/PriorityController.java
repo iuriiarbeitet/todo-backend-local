@@ -29,7 +29,7 @@ public class PriorityController {
     @PostMapping("/all")
     public ResponseEntity<List<Priority>> findAll(@RequestBody String email) {
 
-        MyLogger.debugMethodName("PriorityController: findAll() ---------------------------------------------------------- ");
+        MyLogger.debugMethodName("PriorityController: findAll() ------------------------------------------- ");
 
         return ResponseEntity.ok(priorityService.findAll(email));
     }
@@ -37,7 +37,7 @@ public class PriorityController {
     @PutMapping("/add")
     public ResponseEntity<Priority> add(@RequestBody Priority priority) {
 
-        MyLogger.debugMethodName("PriorityController: add() ---------------------------------------------------------- ");
+        MyLogger.debugMethodName("PriorityController: add() ------------------------------------------------ ");
 
         if (priority.getId() != null && priority.getId() != 0) {
             return new ResponseEntity("redundant param: id MUST be null", HttpStatus.NOT_ACCEPTABLE);
@@ -54,7 +54,7 @@ public class PriorityController {
     @PatchMapping("/update")
     public ResponseEntity update(@RequestBody Priority priority) {
 
-        MyLogger.debugMethodName("PriorityController: update() ---------------------------------------------------------- ");
+        MyLogger.debugMethodName("PriorityController: update() ---------------------------------------------- ");
 
         if (priority.getId() == null || priority.getId() == 0) {
             return new ResponseEntity("missed param: id", HttpStatus.NOT_ACCEPTABLE);
@@ -73,7 +73,7 @@ public class PriorityController {
     @PostMapping("/id")
     public ResponseEntity<Priority> findById(@RequestBody Long id) {
 
-        MyLogger.debugMethodName("PriorityController: findById() ---------------------------------------------------------- ");
+        MyLogger.debugMethodName("PriorityController: findById() -------------------------------------------- ");
 
         if (id == null || id == 0) {
             return new ResponseEntity("missed param: id", HttpStatus.NOT_ACCEPTABLE);
@@ -93,7 +93,7 @@ public class PriorityController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id) {
 
-        MyLogger.debugMethodName("PriorityController: delete() ---------------------------------------------------------- ");
+        MyLogger.debugMethodName("PriorityController: delete() ---------------------------------------------- ");
 
         try {
             priorityService.deleteById(id);
@@ -108,7 +108,7 @@ public class PriorityController {
     @PostMapping("/search")
     public ResponseEntity<List<Priority>> search(@RequestBody PrioritySearchValues prioritySearchValues) {
 
-        MyLogger.debugMethodName("PriorityController: search() ---------------------------------------------------------- ");
+        MyLogger.debugMethodName("PriorityController: search() ----------------------------------------------- ");
 
         return ResponseEntity.ok(priorityService.find(prioritySearchValues.getTitle(), prioritySearchValues.getEmail()));
     }
