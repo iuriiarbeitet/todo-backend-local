@@ -12,12 +12,9 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     @Query("SELECT c FROM Category c where " +
-
             "(:title is null or :title='' " +
             " or lower(c.title) like lower(concat('%', :title,'%'))) " +
-
             " and c.user.email=:email  " +
-
             "order by c.title asc")
     List<Category> find(@Param("title") String title, @Param("email") String email);
     List<Category> findByUserEmailOrderByTitleAsc(String email);

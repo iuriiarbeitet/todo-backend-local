@@ -39,15 +39,15 @@ public class EmailService {
             String url = clientURL + "/activate-account/" + uuid;
 
             String htmlMsg = String.format(
-                    "Здравствуйте.<br/><br/>" +
-                            "Вы создали аккаунт для веб приложения \"Планировщик дел\": %s <br/><br/>" +
-                            "<a href='%s'>%s</a><br/><br/>", username, url, "Для подтверждения регистрации нажмите на эту ссылку");
+                    "Hello.<br/><br/>" +
+                            "You have created an account for the web application. \"Task planner\": %s <br/><br/>" +
+                            "<a href='%s'>%s</a><br/><br/>", username, url, "To confirm your registration, click on this link");
 
             mimeMessage.setContent(htmlMsg, "text/html");
 
             message.setTo(email);
             message.setFrom(emailFrom);
-            message.setSubject("Требуется активация аккаунта");
+            message.setSubject("Account activation required");
             message.setText(htmlMsg, true);
             sender.send(mimeMessage);
 
@@ -68,15 +68,15 @@ public class EmailService {
             String url = clientURL + "/update-password/" + token;
 
             String htmlMsg = String.format(
-                    "Здравствуйте.<br/><br/>" +
-                            "Кто-то запросил сброс пароля для веб приложения \"Планировщик дел\".<br/><br/>" +
-                            "Если это были не вы - просто удалите это письмо.<br/><br/> Нажмите на ссылку ниже, если хотите сбросить пароль: <br/><br/> " +
-                            "<a href='%s'>%s</a><br/><br/>", url, "Сбросить пароль"); // вместо %s будет подставляться значение в порядке следования
+                    "Hello.<br/><br/>" +
+                            "Someone requested a password reset for the web application \"Task planner\".<br/><br/>" +
+                            "If it wasn't you, just delete this email..<br/><br/> Click the link below if you want to reset your password: <br/><br/> " +
+                            "<a href='%s'>%s</a><br/><br/>", url, "Reset password");
 
             mimeMessage.setContent(htmlMsg, "text/html");
 
             message.setTo(email);
-            message.setSubject("Сброс пароля");
+            message.setSubject("Reset password");
             message.setFrom(emailFrom);
             message.setText(htmlMsg, true);
             sender.send(mimeMessage);

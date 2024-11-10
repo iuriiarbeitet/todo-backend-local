@@ -22,7 +22,7 @@ public class StatController {
     @PostMapping("/stat")
     public ResponseEntity<Stat> findByEmail(@RequestBody String email) {
 
-        MyLogger.debugMethodName("StatController: findById() ---------------------------------------------------------- ");
+        MyLogger.debugMethodName("StatController: findById() ------------------------------------------------- ");
 
         return ResponseEntity.ok(statService.findStat(email));
     }

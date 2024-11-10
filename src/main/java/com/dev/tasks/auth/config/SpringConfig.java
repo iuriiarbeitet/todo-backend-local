@@ -41,7 +41,7 @@ public class SpringConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void setUserDetailsService(UserDetailsServiceImpl userDetailsService) { // внедряем наш компонент Spring @Service
+    public void setUserDetailsService(UserDetailsServiceImpl userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
@@ -62,16 +62,16 @@ public class SpringConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception { // настройки AuthenticationManager для правильной проверки логин-пароль
+    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.
-                userDetailsService(userDetailsService). // использовать наш сервис для загрузки User из БД
-                passwordEncoder(passwordEncoder()); // указываем, что используется кодировщик пароля (для корректной проверки пароля)
+                userDetailsService(userDetailsService).
+                passwordEncoder(passwordEncoder());
     }
 
     @Bean
     public FilterRegistrationBean registration(AuthTokenFilter filter) {
-        FilterRegistrationBean registration = new FilterRegistrationBean(filter); // FilterRegistrationBean - регистратор фильтров для сервлет контейнера
-        registration.setEnabled(false); // отключить исп-е фильтра для сервлет контейнера
+        FilterRegistrationBean registration = new FilterRegistrationBean(filter);
+        registration.setEnabled(false);
         return registration;
     }
 
