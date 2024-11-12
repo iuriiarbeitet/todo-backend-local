@@ -38,40 +38,34 @@ public class UserService {
 
     public boolean userExists(String username, String email) {
 
-        if (userRepository.existsByUsername(username)) {
-            return true;
-        }
-        if (userRepository.existsByEmail(email)) {
-            return true; // если запись в БД существует
-        }
-        return false;
+        return userRepository.existsByUsername(username) || userRepository.existsByEmail(email);
     }
 
     public Optional<Role> findByName(String role) {
         return roleRepository.findByName(role);
     }
 
-    public Activity saveActivity(Activity activity){
-        return activityRepository.save(activity);
-    }
+//    public Activity saveActivity(Activity activity) {
+//        return activityRepository.save(activity);
+//    }
 
-    public Optional<Activity> findActivityByUserId(long id){
+    public Optional<Activity> findActivityByUserId(long id) {
         return activityRepository.findByUserId(id);
     }
 
-    public Optional<Activity> findActivityByUuid(String uuid){
+    public Optional<Activity> findActivityByUuid(String uuid) {
         return activityRepository.findByUuid(uuid);
     }
 
-    public int activate(String uuid){
+    public int activate(String uuid) {
         return activityRepository.changeActivated(uuid, true);
     }
 
-    public int deactivate(String uuid){
-        return activityRepository.changeActivated(uuid, false);
-    }
+//    public int deactivate(String uuid) {
+//        return activityRepository.changeActivated(uuid, false);
+//    }
 
-    public int updatePassword(String password, String email){
+    public int updatePassword(String password, String email) {
         return userRepository.updatePassword(password, email);
     }
 

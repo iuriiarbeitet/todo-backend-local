@@ -17,7 +17,7 @@ import java.util.NoSuchElementException;
 @RequestMapping("/category")
 public class CategoryController {
 
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     @Autowired
     public CategoryController(CategoryService categoryService) {
@@ -33,55 +33,52 @@ public class CategoryController {
     }
 
     @PutMapping("/add")
-    public ResponseEntity<Category> add(@RequestBody Category category){
+    public ResponseEntity<?> add(@RequestBody Category category){
+        boolean check = category.getId() != null && category.getId() != 0;
 
         MyLogger.debugMethodName("CategoryController: add(category) ------------------------------------ ");
 
-        if (category.getId() != null && category.getId() != 0) {
-            return new ResponseEntity("redundant param: id MUST be null", HttpStatus.NOT_ACCEPTABLE);
+        if (check) {
+            return new ResponseEntity<>("redundant param: id MUST be null", HttpStatus.NOT_ACCEPTABLE);
         }
-
-        if (category.getTitle() == null || category.getTitle().trim().length() == 0) {
-            return new ResponseEntity("missed param: title", HttpStatus.NOT_ACCEPTABLE);
+        if (category.getTitle() == null || category.getTitle().trim().isEmpty()) {
+            return new ResponseEntity<>("missed param: title", HttpStatus.NOT_ACCEPTABLE);
         }
         return ResponseEntity.ok(categoryService.add(category));
     }
 
     @PatchMapping("/update")
-    public ResponseEntity update(@RequestBody Category category) {
+    public ResponseEntity<?> update(@RequestBody Category category) {
 
+        boolean check = category.getId() == null || category.getId() == 0;
         MyLogger.debugMethodName("CategoryController: update(category) ---------------------------------- ");
-
-        if (category.getId() == null || category.getId() == 0) {
-            return new ResponseEntity("missed param: id", HttpStatus.NOT_ACCEPTABLE);
+        if (check) {
+            return new ResponseEntity<>("missed param: id", HttpStatus.NOT_ACCEPTABLE);
         }
-
-        if (category.getTitle() == null || category.getTitle().trim().length() == 0) {
-            return new ResponseEntity("missed param: title", HttpStatus.NOT_ACCEPTABLE);
+        if (category.getTitle() == null || category.getTitle().trim().isEmpty()) {
+            return new ResponseEntity<>("missed param: title", HttpStatus.NOT_ACCEPTABLE);
         }
-
         categoryService.update(category);
-
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete(@PathVariable("id") Long id) {
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
 
         MyLogger.debugMethodName("CategoryController: delete(id) ----------------------------------------- ");
 
         if (id == null || id == 0) {
-            return new ResponseEntity("missed param: id", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("missed param: id", HttpStatus.NOT_ACCEPTABLE);
         }
 
         try {
             categoryService.delete(id);
         } catch (EmptyResultDataAccessException e) {
-            e.printStackTrace();
-            return new ResponseEntity("id=" + id + " not found", HttpStatus.NOT_ACCEPTABLE);
+            MyLogger.debugMethodName("CategoryController: delete(id) exception ------");
+            return new ResponseEntity<>("id=" + id + " not found", HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/search")
@@ -95,19 +92,18 @@ public class CategoryController {
     }
 
     @PostMapping("/id")
-    public ResponseEntity<Category> findById(@RequestBody Long id) {
+    public ResponseEntity<?> findById(@RequestBody Long id) {
 
         MyLogger.debugMethodName("CategoryController: findById() ---------------------------------------- ");
 
-        Category category = null;
+        Category category;
 
         try {
             category = categoryService.findById(id);
         } catch (NoSuchElementException e) {
-            e.printStackTrace();
-            return new ResponseEntity("id=" + id + " not found", HttpStatus.NOT_ACCEPTABLE);
+            MyLogger.debugMethodName("CategoryController: findById() exception -------");
+            return new ResponseEntity<>("id=" + id + " not found", HttpStatus.NOT_ACCEPTABLE);
         }
-
         return ResponseEntity.ok(category);
     }
 }

@@ -9,8 +9,6 @@ public class MyLogger {
         System.out.println();
         System.out.println();
         log.info(text);
-
     }
-
 }
 

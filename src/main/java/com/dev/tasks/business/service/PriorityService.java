@@ -5,6 +5,7 @@ import com.dev.tasks.business.entity.Priority;
 import com.dev.tasks.business.repository.PriorityRepository;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class PriorityService {
     }
 
     public Priority findById(Long id) {
-        return repository.findById(id).get();
+        return repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Priority with id " + id + " not found"));
     }
 
     public List<Priority> find(String title, String email) {

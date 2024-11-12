@@ -35,74 +35,75 @@ public class PriorityController {
     }
 
     @PutMapping("/add")
-    public ResponseEntity<Priority> add(@RequestBody Priority priority) {
+    public ResponseEntity<?> add(@RequestBody Priority priority) {
+        boolean check = priority.getId() != null && priority.getId() != 0;
 
         MyLogger.debugMethodName("PriorityController: add() ------------------------------------------------ ");
 
-        if (priority.getId() != null && priority.getId() != 0) {
-            return new ResponseEntity("redundant param: id MUST be null", HttpStatus.NOT_ACCEPTABLE);
+        if (check) {
+            return new ResponseEntity<>("redundant param: id MUST be null", HttpStatus.NOT_ACCEPTABLE);
         }
-        if (priority.getTitle() == null || priority.getTitle().trim().length() == 0) {
-            return new ResponseEntity("missed param: title", HttpStatus.NOT_ACCEPTABLE);
+        if (priority.getTitle() == null || priority.getTitle().trim().isEmpty()) {
+            return new ResponseEntity<>("missed param: title", HttpStatus.NOT_ACCEPTABLE);
         }
-        if (priority.getColor() == null || priority.getColor().trim().length() == 0) {
-            return new ResponseEntity("missed param: color", HttpStatus.NOT_ACCEPTABLE);
+        if (priority.getColor() == null || priority.getColor().trim().isEmpty()) {
+            return new ResponseEntity<>("missed param: color", HttpStatus.NOT_ACCEPTABLE);
         }
         return ResponseEntity.ok(priorityService.add(priority));
     }
 
     @PatchMapping("/update")
-    public ResponseEntity update(@RequestBody Priority priority) {
+    public ResponseEntity<?> update(@RequestBody Priority priority) {
+        boolean check = priority.getId() == null || priority.getId() == 0;
 
         MyLogger.debugMethodName("PriorityController: update() ---------------------------------------------- ");
 
-        if (priority.getId() == null || priority.getId() == 0) {
-            return new ResponseEntity("missed param: id", HttpStatus.NOT_ACCEPTABLE);
+        if (check) {
+            return new ResponseEntity<>("missed param: id", HttpStatus.NOT_ACCEPTABLE);
         }
-        if (priority.getTitle() == null || priority.getTitle().trim().length() == 0) {
-            return new ResponseEntity("missed param: title", HttpStatus.NOT_ACCEPTABLE);
+        if (priority.getTitle() == null || priority.getTitle().trim().isEmpty()) {
+            return new ResponseEntity<>("missed param: title", HttpStatus.NOT_ACCEPTABLE);
         }
-        if (priority.getColor() == null || priority.getColor().trim().length() == 0) {
-            return new ResponseEntity("missed param: color", HttpStatus.NOT_ACCEPTABLE);
+        if (priority.getColor() == null || priority.getColor().trim().isEmpty()) {
+            return new ResponseEntity<>("missed param: color", HttpStatus.NOT_ACCEPTABLE);
         }
         priorityService.update(priority);
 
-        return new ResponseEntity(HttpStatus.OK); // просто отправляем статус 200 (операция прошла успешно)
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/id")
-    public ResponseEntity<Priority> findById(@RequestBody Long id) {
+    public ResponseEntity<?> findById(@RequestBody Long id) {
 
         MyLogger.debugMethodName("PriorityController: findById() -------------------------------------------- ");
 
         if (id == null || id == 0) {
-            return new ResponseEntity("missed param: id", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("missed param: id", HttpStatus.NOT_ACCEPTABLE);
         }
-        Priority priority = null;
+        Priority priority;
 
         try {
             priority = priorityService.findById(id);
         } catch (NoSuchElementException e) {
-            e.printStackTrace();
-            return new ResponseEntity("id=" + id + " not found", HttpStatus.NOT_ACCEPTABLE);
+           MyLogger.debugMethodName("PriorityController: findById() exception --------");
+            return new ResponseEntity<>("id=" + id + " not found", HttpStatus.NOT_ACCEPTABLE);
         }
-
         return ResponseEntity.ok(priority);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete(@PathVariable("id") Long id) {
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
 
         MyLogger.debugMethodName("PriorityController: delete() ---------------------------------------------- ");
 
         try {
             priorityService.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            e.printStackTrace();
-            return new ResponseEntity("id=" + id + " not found", HttpStatus.NOT_ACCEPTABLE);
+           MyLogger.debugMethodName("PriorityController: delete() exception");
+            return new ResponseEntity<>("id=" + id + " not found", HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/search")

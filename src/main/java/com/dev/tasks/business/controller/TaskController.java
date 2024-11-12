@@ -40,69 +40,61 @@ public class TaskController {
     }
 
     @PutMapping("/add")
-    public ResponseEntity<Task> add(@RequestBody Task task) {
+    public ResponseEntity<?> add(@RequestBody Task task) {
 
         MyLogger.debugMethodName("task: add() ---------------------------------------------------------------- ");
 
         if (task.getId() != null && task.getId() != 0) {
-            return new ResponseEntity("redundant param: id MUST be null", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("redundant param: id MUST be null", HttpStatus.NOT_ACCEPTABLE);
         }
-
-        if (task.getTitle() == null || task.getTitle().trim().length() == 0) {
-            return new ResponseEntity("missed param: title", HttpStatus.NOT_ACCEPTABLE);
+        if (task.getTitle() == null || task.getTitle().trim().isEmpty()) {
+            return new ResponseEntity<>("missed param: title", HttpStatus.NOT_ACCEPTABLE);
         }
-
         return ResponseEntity.ok(taskService.add(task));
-
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<Task> update(@RequestBody Task task) {
+    public ResponseEntity<?> update(@RequestBody Task task) {
 
         MyLogger.debugMethodName("task: update() ---------------------------------------------------------------- ");
 
         if (task.getId() == null || task.getId() == 0) {
-            return new ResponseEntity("missed param: id", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("missed param: id", HttpStatus.NOT_ACCEPTABLE);
         }
-
-        if (task.getTitle() == null || task.getTitle().trim().length() == 0) {
-            return new ResponseEntity("missed param: title", HttpStatus.NOT_ACCEPTABLE);
+        if (task.getTitle() == null || task.getTitle().trim().isEmpty()) {
+            return new ResponseEntity<>("missed param: title", HttpStatus.NOT_ACCEPTABLE);
         }
-
         taskService.update(task);
-
-        return new ResponseEntity(HttpStatus.OK);
-
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete(@PathVariable("id") Long id) {
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
 
         MyLogger.debugMethodName("task: delete() ---------------------------------------------------------------- ");
 
         try {
             taskService.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            e.printStackTrace();
-            return new ResponseEntity("id=" + id + " not found", HttpStatus.NOT_ACCEPTABLE);
+           MyLogger.debugMethodName("task: delete() exception --------------");
+            return new ResponseEntity<>("id=" + id + " not found", HttpStatus.NOT_ACCEPTABLE);
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/id")
-    public ResponseEntity<Task> findById(@RequestBody Long id) {
+    public ResponseEntity<?> findById(@RequestBody Long id) {
 
         MyLogger.debugMethodName("task: findById() ---------------------------------------------------------------- ");
 
-        Task task = null;
+        Task task;
 
         try {
             task = taskService.findById(id);
-        } catch (NoSuchElementException e) { // если объект не будет найден
-            e.printStackTrace();
-            return new ResponseEntity("id=" + id + " not found", HttpStatus.NOT_ACCEPTABLE);
+        } catch (NoSuchElementException e) {
+            MyLogger.debugMethodName("task: findById() exception ------------");
+            return new ResponseEntity<>("id=" + id + " not found", HttpStatus.NOT_ACCEPTABLE);
         }
-
         return ResponseEntity.ok(task);
     }
 
@@ -122,10 +114,10 @@ public class TaskController {
         String sortColumn = taskSearchValues.getSortColumn() != null ? taskSearchValues.getSortColumn() : null;
         String sortDirection = taskSearchValues.getSortDirection() != null ? taskSearchValues.getSortDirection() : null;
 
-        Integer pageNumber = taskSearchValues.getPageNumber() != null ? taskSearchValues.getPageNumber() : 0;
-        Integer pageSize = taskSearchValues.getPageSize() != null ? taskSearchValues.getPageSize() : 10;
+        int pageNumber = taskSearchValues.getPageNumber() != null ? taskSearchValues.getPageNumber() : 0;
+        int pageSize = taskSearchValues.getPageSize() != null ? taskSearchValues.getPageSize() : 10;
 
-        String email = taskSearchValues.getEmail() != null ? taskSearchValues.getEmail() : null; // для показа задач только этого пользователя
+        String email = taskSearchValues.getEmail() != null ? taskSearchValues.getEmail() : null;
 
         Date dateFrom = null;
         Date dateTo = null;
@@ -156,7 +148,7 @@ public class TaskController {
 
         }
 
-        Sort.Direction direction = sortDirection == null || sortDirection.trim().length() == 0 || sortDirection.trim().equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort.Direction direction = sortDirection == null || sortDirection.trim().isEmpty() || sortDirection.trim().equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
 
         if (sortColumn == null){
             sortColumn = ID_COLUMN;

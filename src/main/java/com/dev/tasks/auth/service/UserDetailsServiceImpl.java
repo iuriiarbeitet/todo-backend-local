@@ -27,10 +27,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         Optional<User> userOptional = userRepository.findByUsername(username);
 
-        if (!userOptional.isPresent()) {
+        if (userOptional.isEmpty()) {
             userOptional = userRepository.findByEmail(username);
         }
-        if (!userOptional.isPresent()) {
+        if (userOptional.isEmpty()) {
             throw new UsernameNotFoundException("User Not Found with username or email: " + username);
         }
         return new UserDetailsImpl(userOptional.get());

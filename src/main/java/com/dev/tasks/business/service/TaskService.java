@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
@@ -20,7 +21,6 @@ public class TaskService {
     public TaskService(TaskRepository repository) {
         this.repository = repository;
     }
-
 
     public List<Task> findAll(String email) {
         return repository.findByUserEmailOrderByTitleAsc(email);
@@ -38,14 +38,12 @@ public class TaskService {
         repository.deleteById(id);
     }
 
-
     public Task findById(Long id) {
-        return repository.findById(id).get();
+        return repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Task with id " + id + " not found"));
     }
 
     public Page<Task> find(String text, Integer completed, Long priorityId, Long categoryId, String email, Date dateFrom, Date dateTo, PageRequest paging) {
         return repository.find(text, completed, priorityId, categoryId, email, dateFrom, dateTo, paging);
     }
-
 
 }

@@ -68,7 +68,7 @@ public class AuthController {
 
     @PostMapping("/logout")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity logout() {
+    public ResponseEntity<HttpHeaders> logout() {
 
         HttpCookie cookie = cookieUtils.deleteJwtCookie();
 
@@ -80,7 +80,7 @@ public class AuthController {
     }
 
     @PutMapping("/register")
-    public ResponseEntity register(@Valid @RequestBody User user) {
+    public ResponseEntity<Void> register(@Valid @RequestBody User user) {
 
         if (userService.userExists(user.getUsername(), user.getEmail())) {
             throw new UserOrEmailExistsException("User or email already exists");
@@ -141,7 +141,7 @@ public class AuthController {
     }
 
     @PostMapping("/resend-activate-email")
-    public ResponseEntity resendActivateEmail(@RequestBody String usernameOrEmail) {
+    public ResponseEntity<Void> resendActivateEmail(@RequestBody String usernameOrEmail) {
 
         UserDetailsImpl user = (UserDetailsImpl) userDetailsService.loadUserByUsername(usernameOrEmail);
 
@@ -157,15 +157,13 @@ public class AuthController {
     }
 
     @PostMapping("/send-reset-password-email")
-    public ResponseEntity sendEmailResetPassword(@RequestBody String email) {
+    public ResponseEntity<Void> sendEmailResetPassword(@RequestBody String email) {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUsername(email);
 
         User user = userDetails.getUser();
 
-        if (userDetails != null) {
-            emailService.sendResetPasswordEmail(user.getEmail(), jwtUtils.createEmailResetToken(user));
-        }
+        emailService.sendResetPasswordEmail(user.getEmail(), jwtUtils.createEmailResetToken(user));
         return ResponseEntity.ok().build();
     }
 
@@ -189,7 +187,7 @@ public class AuthController {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<JsonException> handleExceptions(Exception ex) {
-        return new ResponseEntity(new JsonException(ex.getClass().getSimpleName()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new JsonException(ex.getClass().getSimpleName()), HttpStatus.BAD_REQUEST);
     }
 
 }

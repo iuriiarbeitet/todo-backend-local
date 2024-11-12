@@ -40,7 +40,7 @@ public class JwtUtils {
 
         user.setPassword(null);
 
-        Map claims = new HashMap<String, Object>();
+        Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_USER_KEY, user);
         claims.put(Claims.SUBJECT, user.getId());
 
@@ -73,7 +73,11 @@ public class JwtUtils {
 
     public User getUser(String jwt) {
 
-        Map map = (Map) Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwt).getBody().get(CLAIM_USER_KEY);
+        Map map = (Map) Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(jwt)
+                .getBody()
+                .get(CLAIM_USER_KEY);
 
         ObjectMapper mapper = new ObjectMapper();
         User user = mapper.convertValue(map, User.class);

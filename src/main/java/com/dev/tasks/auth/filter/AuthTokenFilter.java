@@ -7,6 +7,7 @@ import com.dev.tasks.auth.utils.CookieUtils;
 import com.dev.tasks.auth.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -54,7 +55,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
         boolean isRequestToPublicAPI = permitURL.stream().anyMatch(s -> request.getRequestURI().toLowerCase().contains(s));
@@ -63,7 +66,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 !isRequestToPublicAPI && !request.getMethod().equals(HttpMethod.OPTIONS.toString())
         ) {
 
-            String jwt = null;
+            String jwt;
 
             if (request.getRequestURI().contains("update-password")) {
                 jwt = getJwtFromHeader(request);
