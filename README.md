@@ -38,6 +38,7 @@ Diese Anwendung ist eine einfache Plattform zur Verwaltung von Aufgaben (To-Do L
   - Spring Security für JWT-Authentifizierung
   - JPA für die Interaktion mit PostgreSQL
   - PostgreSQL für die Datenspeicherung
+  - Spring Boot Test, jUnit, Mockito
 
 - **Frontend**:
   - **Angular 11.x**

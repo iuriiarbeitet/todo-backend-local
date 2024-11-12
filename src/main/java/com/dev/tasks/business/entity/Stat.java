@@ -26,7 +26,7 @@ public class Stat {
     private Long uncompletedTotal;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id") // по каким полям связывать (foreign key)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     public User user;
 
 }
